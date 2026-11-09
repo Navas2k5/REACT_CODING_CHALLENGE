@@ -1,7 +1,7 @@
-
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { addObjects } from "../store/ObjectAction"
+import { useNavigate } from "react-router-dom"
 
 function ObjectAdd() {
 
@@ -11,17 +11,19 @@ function ObjectAdd() {
     const [cpu, setCpu] = useState("")
     const [success, setSuccess] = useState("")
 
+    const navigate= useNavigate()
+
     const dispatch = useDispatch()
 
-    const onAdd=async(e)=> {
+    const onAdd = async (e) => {
 
         e.preventDefault()
 
         const object = {
             name: name,
             data: {
-                Year: year,
-                Price: price,
+                Year: Number(year),
+                Price: Number(price),
                 CPU: cpu
             }
         }
@@ -29,9 +31,11 @@ function ObjectAdd() {
         try {
             await dispatch(addObjects(object))
             setSuccess("OBJECT ADDED SUCCESSFULLY")
-            
+            navigate("/object-list")
+
         } catch (err) {
             setSuccess("OBJECT ADDING FAILED")
+            throw err
         }
     }
 

@@ -1,25 +1,32 @@
-const iniialState={
-    list:[]
+const iniialState = {
+    list: []
 }
 
-const ObjectReducer = (state=iniialState,action)=>{
-    switch(action.type){
+const ObjectReducer = (state = iniialState, action) => {
+    switch (action.type) {
         case "GET_ALL_OBJECTS":
             return {
                 ...state,
-                list:action.payload
+                list: [
+                    ...action.payload,
+                    ...state.list.filter(
+                        obj => !action.payload.find(
+                            fetched => fetched.id === obj.id
+                        )
+                    )
+                ]
             }
 
         case "ADD_OBJECT":
-            return{
+            return {
                 ...state,
-                list:[...state.list,action.payload]
+                list: [...state.list, action.payload]
             }
 
         case "DELETE_OBJECT":
-            return{
+            return {
                 ...state,
-                list:state.list.filter(o=>o.id!==action.payload)
+                list: state.list.filter(o => o.id !== action.payload)
             }
 
         default:
